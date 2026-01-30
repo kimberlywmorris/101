@@ -70,13 +70,13 @@ h1 {
         transform: translateX(-100px) translateY(0) rotate(0deg);
     }
     25% {
-        transform: translateX(calc(25vw)) translateY(-40px) rotate(25deg);
+        transform: translateX(calc(25vw)) translateY(-40px) rotate(30deg);
     }
     50% {
         transform: translateX(calc(50vw)) translateY(0) rotate(0deg);
     }
     75% {
-        transform: translateX(calc(75vw)) translateY(-40px) rotate(-25deg);
+        transform: translateX(calc(75vw)) translateY(-40px) rotate(-30deg);
     }
     100% {
         transform: translateX(calc(100vw + 100px)) translateY(0) rotate(0deg);
