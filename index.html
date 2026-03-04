@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/weather.css">
 </head>
 <body>
     <div class="container">
@@ -13,10 +14,17 @@
             <img src="profile.jpg" alt="Profile Photo" class="profile-pic">
         </div>
         <button class="contact-btn">Contact Me</button>
+        
+        <!-- Weather Widget -->
+        <div class="weather-widget" id="weather-widget">
+            <div class="weather-loading">Loading weather...</div>
+        </div>
     </div>
     <footer>
         <div class="unicorn">🦄</div>
     </footer>
 
+    <!-- Add before closing </body> tag -->
+    <script src="js/weather.js"></script>
 </body>
 </html>
