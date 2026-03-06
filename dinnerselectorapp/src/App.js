@@ -10,6 +10,7 @@ import Wheel from './components/Wheel';
 import ResultPanel from './components/ResultPanel';
 import HistoryPanel from './components/HistoryPanel';
 import PreferencesPanel from './components/PreferencesPanel';
+import LoadingSpinner from './components/LoadingSpinner';
 
 /**
  * Main App Component (with state context)
@@ -109,31 +110,28 @@ function AppContent() {
   // Main app loaded
   return (
     <div className="App min-h-screen bg-gray-50">
-      <header className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6 shadow-lg">
-        <h1 className="text-3xl font-bold">🍽️ Family Dinner Spinner</h1>
-        <p className="text-lg mt-2">Let the wheel decide where you eat!</p>
+      <header className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-4 sm:p-6 shadow-lg">
+        <h1 className="text-2xl sm:text-3xl font-bold">🍽️ Family Dinner Spinner</h1>
+        <p className="text-sm sm:text-lg mt-2">Let the wheel decide where you eat!</p>
         {userLocation && (
-          <p className="text-sm mt-2 opacity-90">
+          <p className="text-xs sm:text-sm mt-2 opacity-90">
             📍 {userLocation.lat.toFixed(4)}, {userLocation.lng.toFixed(4)}
           </p>
         )}
       </header>
 
-      <main className="container mx-auto p-6 max-w-7xl">
+      <main className="container mx-auto p-4 sm:p-6 max-w-7xl">
         {isAppLoading ? (
-          <div className="flex justify-center items-center min-h-64">
-            <div className="animate-spin">
-              <div className="w-12 h-12 border-4 border-purple-200 border-t-purple-600 rounded-full"></div>
-            </div>
-            <p className="ml-4 text-gray-600">Loading restaurants...</p>
+          <div className="flex justify-center items-center min-h-96">
+            <LoadingSpinner size="lg" message="Loading restaurants..." />
           </div>
         ) : layout === 'default' ? (
           <>
             {/* Main Spinning View */}
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
               {/* Left Sidebar: Filters */}
               <div className="lg:col-span-1">
-                <div className="sticky top-6 space-y-6">
+                <div className="sticky top-4 sm:top-6 space-y-4 sm:space-y-6">
                   <FiltersPanel />
                   <RestaurantList />
                 </div>
@@ -141,7 +139,7 @@ function AppContent() {
 
               {/* Center: Wheel */}
               <div className="lg:col-span-2">
-                <div className="bg-white rounded-lg shadow-lg p-8">
+                <div className="bg-white rounded-lg shadow-lg p-6 sm:p-8 flex items-center justify-center min-h-96">
                   <Wheel
                     restaurants={getEligibleRestaurants()}
                     onSpinComplete={handleSpinComplete}
@@ -152,14 +150,14 @@ function AppContent() {
 
               {/* Right: Result Panel */}
               <div className="lg:col-span-1">
-                <div className="sticky top-6">
+                <div className="sticky top-4 sm:top-6">
                   <ResultPanel restaurant={selectedRestaurant} />
                 </div>
               </div>
             </div>
 
             {/* Bottom: History & Preferences Panels */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               <HistoryPanel />
               <PreferencesPanel />
             </div>

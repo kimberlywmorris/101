@@ -24,6 +24,7 @@ const PRICE_SYMBOLS = {
 export const FiltersPanel = () => {
   const { filters, updateFilters } = useAppState();
   const [showFilters, setShowFilters] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   
   const cuisines = getAllCuisineTypes();
   const priceLevels = getPriceLevels();
@@ -55,7 +56,7 @@ export const FiltersPanel = () => {
       radiusMeters: 16000,
       cuisines: [],
       priceLevels: [],
-      openNow: true
+      openNow: false
     });
   };
 
@@ -172,9 +173,9 @@ export const FiltersPanel = () => {
           {/* Reset Button */}
           <button
             onClick={handleReset}
-            className="w-full px-4 py-2 text-gray-700 font-medium hover:bg-gray-100 rounded-lg transition"
+            className="w-full px-4 py-2.5 text-blue-600 hover:bg-blue-50 active:bg-blue-100 rounded-lg transition text-sm font-medium touch-manipulation"
           >
-            Reset Filters
+            🔄 Reset Filters
           </button>
         </div>
       )}
