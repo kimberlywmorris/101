@@ -7,11 +7,11 @@ import React, { useEffect, useRef, useState } from 'react';
 
 const COLORS = [
   '#1BA098', '#0F4C5C', '#5A189A', '#9D0208',
-  '#D4A574', '#1E7B5F', '#663399', '#A01F36',
-  '#2E8B9E', '#6B2D5C', '#C89856', '#0C5F4C'
+  '#1E7B5F', '#663399', '#A01F36',
+  '#2E8B9E', '#6B2D5C', '#0C5F4C'
 ];
 
-export const Wheel = ({ restaurants, onSpinComplete, onSpinStart, isSpinning }) => {
+export const Wheel = ({ restaurants, onSpinComplete, isSpinning }) => {
   const svgRef = useRef(null);
   const [rotation, setRotation] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -70,9 +70,6 @@ export const Wheel = ({ restaurants, onSpinComplete, onSpinStart, isSpinning }) 
   const handleSpin = () => {
     if (isSpinning) return;
 
-    // Notify parent that spinning is starting
-    onSpinStart();
-
     // Random selection
     const randomIndex = Math.floor(Math.random() * restaurants.length);
     setSelectedIndex(randomIndex);
@@ -81,17 +78,14 @@ export const Wheel = ({ restaurants, onSpinComplete, onSpinStart, isSpinning }) 
     // Target: selected slice should stop at top (pointer position)
     const sliceStartAngle = randomIndex * sliceAngle;
     const sliceMiddleAngle = sliceStartAngle + sliceAngle / 2;
-    const targetRotation = 360 * 15 + (360 - sliceMiddleAngle); // 15 full rotations + to position
+    const targetRotation = 360 * 5 + (360 - sliceMiddleAngle); // 5 full rotations + to position
 
-    // Small delay to ensure state updates and transition starts
-    setTimeout(() => {
-      setRotation(targetRotation);
-    }, 50);
+    setRotation(targetRotation);
 
-    // Call parent callback after animation completes (4 seconds)
+    // Call parent callback after animation completes (3 seconds)
     setTimeout(() => {
       onSpinComplete(randomIndex);
-    }, 4000);
+    }, 3000);
   };
 
   return (
@@ -113,8 +107,8 @@ export const Wheel = ({ restaurants, onSpinComplete, onSpinStart, isSpinning }) 
           }`}
           style={{
             transform: `rotate(${rotation}deg)`,
-            transitionDuration: isSpinning ? '4s' : '0s',
-            transitionTimingFunction: 'cubic-bezier(0.17, 0.67, 0.12, 0.98)',
+            transitionDuration: isSpinning ? '3s' : '0s',
+            transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
             filter: 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15))'
           }}
         >
