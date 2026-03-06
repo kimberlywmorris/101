@@ -139,9 +139,14 @@ function AppContent() {
     setIsSpinning(false);
   };
 
+  const handleAddressSubmit = (location) => {
+    setUserLocation(location);
+    loadRestaurants(location);
+  };
+
   // Show geolocation prompt while waiting for location
   if (isGeoLoading || (isGeoLoading && !userLocation)) {
-    return <GeolocationPrompt isLoading={isGeoLoading} error={error} onRetry={retry} />;
+    return <GeolocationPrompt isLoading={isGeoLoading} error={error} onRetry={retry} onAddressSubmit={handleAddressSubmit} />;
   }
 
   if (error) {
