@@ -6,6 +6,8 @@ import { fetchNearbyRestaurants } from './services/restaurantService';
 import GeolocationPrompt from './components/GeolocationPrompt';
 import FiltersPanel from './components/FiltersPanel';
 import RestaurantList from './components/RestaurantList';
+import Wheel from './components/Wheel';
+import ResultPanel from './components/ResultPanel';
 
 /**
  * Main App Component (with state context)
@@ -28,6 +30,12 @@ function AppContent() {
     restaurants,
     setRestaurants,
     filters,
+    preferences,
+    selectedRestaurant,
+    setSelectedRestaurant,
+    isSpinning,
+    setIsSpinning,
+    addHistoryEntry,
     isLoading: isAppLoading,
     setIsLoading
   } = useAppState();
@@ -72,6 +80,25 @@ function AppContent() {
     }
   };
 
+  // Get eligible restaurants (excluding NO_GO)
+  const getEligibleRestaurants = () => {
+    return restaurants.filter(rest => preferences[rest.id] !== 'NO_GO');
+  };
+
+  const handleSpinComplete = (randomIndex) => {
+    const eligibleRests = getEligibleRestaurants();
+    if (eligibleRests[randomIndex]) {
+      const selected = eligibleRests[randomIndex];
+      setSelectedRestaurant(selected);
+      addHistoryEntry(selected.id, selected.name);
+    }
+    setIsSpinning(false);
+  };
+
+  const handleSpinClick = () => {
+    setIsSpinning(true);
+  };
+
   // Show geolocation prompt while waiting for location
   if (isGeoLoading || (isGeoLoading && !userLocation)) {
     return <GeolocationPrompt isLoading={isGeoLoading} error={error} onRetry={retry} />;
@@ -94,7 +121,7 @@ function AppContent() {
         )}
       </header>
 
-      <main className="container mx-auto p-6 max-w-6xl">
+      <main className="container mx-auto p-6 max-w-7xl">
         {isAppLoading ? (
           <div className="flex justify-center items-center min-h-64">
             <div className="animate-spin">
@@ -104,14 +131,30 @@ function AppContent() {
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            {/* Filters Sidebar */}
+            {/* Left Sidebar: Filters */}
             <div className="lg:col-span-1">
-              <FiltersPanel />
+              <div className="sticky top-6 space-y-6">
+                <FiltersPanel />
+                <RestaurantList />
+              </div>
             </div>
 
-            {/* Restaurant List */}
-            <div className="lg:col-span-3">
-              <RestaurantList />
+            {/* Center: Wheel */}
+            <div className="lg:col-span-2">
+              <div className="bg-white rounded-lg shadow-lg p-8">
+                <Wheel
+                  restaurants={getEligibleRestaurants()}
+                  onSpinComplete={handleSpinComplete}
+                  isSpinning={isSpinning}
+                />
+              </div>
+            </div>
+
+            {/* Right: Result Panel */}
+            <div className="lg:col-span-1">
+              <div className="sticky top-6">
+                <ResultPanel restaurant={selectedRestaurant} />
+              </div>
             </div>
           </div>
         )}
