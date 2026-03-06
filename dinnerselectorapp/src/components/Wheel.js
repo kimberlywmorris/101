@@ -6,9 +6,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 const COLORS = [
-  '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A',
-  '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2',
-  '#F8B4D5', '#A9DFBF', '#F5B041', '#D5A4E8'
+  '#1BA098', '#0F4C5C', '#5A189A', '#9D0208',
+  '#D4A574', '#1E7B5F', '#663399', '#A01F36',
+  '#2E8B9E', '#6B2D5C', '#C89856', '#0C5F4C'
 ];
 
 export const Wheel = ({ restaurants, onSpinComplete, isSpinning }) => {
