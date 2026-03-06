@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { AppStateProvider, useAppState } from './context/AppStateContext';
 import { useGeolocation } from './hooks/useGeolocation';
@@ -8,6 +8,8 @@ import FiltersPanel from './components/FiltersPanel';
 import RestaurantList from './components/RestaurantList';
 import Wheel from './components/Wheel';
 import ResultPanel from './components/ResultPanel';
+import HistoryPanel from './components/HistoryPanel';
+import PreferencesPanel from './components/PreferencesPanel';
 
 /**
  * Main App Component (with state context)
@@ -40,6 +42,8 @@ function AppContent() {
     setIsLoading
   } = useAppState();
 
+  const [layout, setLayout] = useState('default'); // 'default', 'preferences', 'history'
+
   const {
     location,
     error,
@@ -58,8 +62,6 @@ function AppContent() {
   // Reload restaurants when filters change
   useEffect(() => {
     if (userLocation && restaurants.length > 0) {
-      // For mock data, we don't need to refetch
-      // In real app, we would call API here with new filters
       console.log('Filters updated:', filters);
     }
   }, [filters, userLocation, restaurants.length]);
@@ -95,10 +97,6 @@ function AppContent() {
     setIsSpinning(false);
   };
 
-  const handleSpinClick = () => {
-    setIsSpinning(true);
-  };
-
   // Show geolocation prompt while waiting for location
   if (isGeoLoading || (isGeoLoading && !userLocation)) {
     return <GeolocationPrompt isLoading={isGeoLoading} error={error} onRetry={retry} />;
@@ -129,33 +127,50 @@ function AppContent() {
             </div>
             <p className="ml-4 text-gray-600">Loading restaurants...</p>
           </div>
+        ) : layout === 'default' ? (
+          <>
+            {/* Main Spinning View */}
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
+              {/* Left Sidebar: Filters */}
+              <div className="lg:col-span-1">
+                <div className="sticky top-6 space-y-6">
+                  <FiltersPanel />
+                  <RestaurantList />
+                </div>
+              </div>
+
+              {/* Center: Wheel */}
+              <div className="lg:col-span-2">
+                <div className="bg-white rounded-lg shadow-lg p-8">
+                  <Wheel
+                    restaurants={getEligibleRestaurants()}
+                    onSpinComplete={handleSpinComplete}
+                    isSpinning={isSpinning}
+                  />
+                </div>
+              </div>
+
+              {/* Right: Result Panel */}
+              <div className="lg:col-span-1">
+                <div className="sticky top-6">
+                  <ResultPanel restaurant={selectedRestaurant} />
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom: History & Preferences Panels */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <HistoryPanel />
+              <PreferencesPanel />
+            </div>
+          </>
+        ) : layout === 'preferences' ? (
+          <div className="grid grid-cols-1 gap-6">
+            <PreferencesPanel />
+          </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            {/* Left Sidebar: Filters */}
-            <div className="lg:col-span-1">
-              <div className="sticky top-6 space-y-6">
-                <FiltersPanel />
-                <RestaurantList />
-              </div>
-            </div>
-
-            {/* Center: Wheel */}
-            <div className="lg:col-span-2">
-              <div className="bg-white rounded-lg shadow-lg p-8">
-                <Wheel
-                  restaurants={getEligibleRestaurants()}
-                  onSpinComplete={handleSpinComplete}
-                  isSpinning={isSpinning}
-                />
-              </div>
-            </div>
-
-            {/* Right: Result Panel */}
-            <div className="lg:col-span-1">
-              <div className="sticky top-6">
-                <ResultPanel restaurant={selectedRestaurant} />
-              </div>
-            </div>
+          <div className="grid grid-cols-1 gap-6">
+            <HistoryPanel />
           </div>
         )}
       </main>
