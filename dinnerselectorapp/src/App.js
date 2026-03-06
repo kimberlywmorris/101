@@ -4,6 +4,7 @@ import { AppStateProvider, useAppState } from './context/AppStateContext';
 import { useGeolocation } from './hooks/useGeolocation';
 import { fetchNearbyRestaurants } from './services/restaurantService';
 import GeolocationPrompt from './components/GeolocationPrompt';
+import LocationHeader from './components/LocationHeader';
 import FiltersPanel from './components/FiltersPanel';
 import RestaurantList from './components/RestaurantList';
 import Wheel from './components/Wheel';
@@ -156,15 +157,7 @@ function AppContent() {
   // Main app loaded
   return (
     <div className="App min-h-screen bg-gray-50">
-      <header className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-4 sm:p-6 shadow-lg">
-        <h1 className="text-2xl sm:text-3xl font-bold">🍽️ Family Dinner Spinner</h1>
-        <p className="text-sm sm:text-lg mt-2">Let the wheel decide where you eat!</p>
-        {userLocation && (
-          <p className="text-xs sm:text-sm mt-2 opacity-90">
-            📍 {userLocation.lat.toFixed(4)}, {userLocation.lng.toFixed(4)}
-          </p>
-        )}
-      </header>
+      <LocationHeader userLocation={userLocation} onLocationChange={handleAddressSubmit} />
 
       <main className="container mx-auto p-4 sm:p-6 max-w-7xl">
         {isAppLoading ? (

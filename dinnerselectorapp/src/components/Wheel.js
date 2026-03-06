@@ -11,10 +11,11 @@ const COLORS = [
   '#2E8B9E', '#6B2D5C', '#0C5F4C'
 ];
 
-export const Wheel = ({ restaurants, onSpinComplete, isSpinning }) => {
+export const Wheel = ({ restaurants, onSpinComplete, onSpinStart, isSpinning }) => {
   const svgRef = useRef(null);
   const [rotation, setRotation] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState(null);
+  const [isLocalSpinning, setIsLocalSpinning] = useState(false);
 
   if (!restaurants || restaurants.length === 0) {
     return (
@@ -68,7 +69,13 @@ export const Wheel = ({ restaurants, onSpinComplete, isSpinning }) => {
   });
 
   const handleSpin = () => {
-    if (isSpinning) return;
+    if (isLocalSpinning) return;
+
+    // Set local spinning state immediately
+    setIsLocalSpinning(true);
+    
+    // Notify parent that spinning is starting
+    onSpinStart();
 
     // Random selection
     const randomIndex = Math.floor(Math.random() * restaurants.length);
@@ -78,14 +85,16 @@ export const Wheel = ({ restaurants, onSpinComplete, isSpinning }) => {
     // Target: selected slice should stop at top (pointer position)
     const sliceStartAngle = randomIndex * sliceAngle;
     const sliceMiddleAngle = sliceStartAngle + sliceAngle / 2;
-    const targetRotation = 360 * 5 + (360 - sliceMiddleAngle); // 5 full rotations + to position
+    const targetRotation = 360 * 2.5 + (360 - sliceMiddleAngle); // 2.5 full rotations + to position
 
+    // Apply rotation immediately with transition (no delay needed)
     setRotation(targetRotation);
 
-    // Call parent callback after animation completes (3 seconds)
+    // Call parent callback after animation completes (2.5 seconds)
     setTimeout(() => {
+      setIsLocalSpinning(false);
       onSpinComplete(randomIndex);
-    }, 3000);
+    }, 2500);
   };
 
   return (
@@ -102,12 +111,10 @@ export const Wheel = ({ restaurants, onSpinComplete, isSpinning }) => {
           width="360"
           height="360"
           viewBox="0 0 360 360"
-          className={`transition-transform ${
-            isSpinning ? 'transition-none' : 'transition-transform'
-          }`}
+          className="transition-transform"
           style={{
             transform: `rotate(${rotation}deg)`,
-            transitionDuration: isSpinning ? '3s' : '0s',
+            transitionDuration: isLocalSpinning ? '2.5s' : '0s',
             transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
             filter: 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15))'
           }}
@@ -160,14 +167,14 @@ export const Wheel = ({ restaurants, onSpinComplete, isSpinning }) => {
       {/* Spin button */}
       <button
         onClick={handleSpin}
-        disabled={isSpinning || restaurants.length === 0}
+        disabled={isLocalSpinning || restaurants.length === 0}
         className={`px-8 py-4 rounded-full text-white font-bold text-xl transition-all transform hover:scale-105 ${
-          isSpinning || restaurants.length === 0
+          isLocalSpinning || restaurants.length === 0
             ? 'bg-gray-400 cursor-not-allowed'
             : 'bg-gradient-to-r from-purple-600 to-blue-600 hover:shadow-lg active:scale-95'
         }`}
       >
-        {isSpinning ? '🎡 Spinning...' : '🎲 SPIN!'}
+        {isLocalSpinning ? '🎡 Spinning...' : '🎲 SPIN!'}
       </button>
 
       {/* Info */}
