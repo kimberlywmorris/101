@@ -125,6 +125,10 @@ function AppContent() {
     return applyFilters(restaurants);
   };
 
+  const handleSpinStart = () => {
+    setIsSpinning(true);
+  };
+
   const handleSpinComplete = (randomIndex) => {
     const eligibleRests = getEligibleRestaurants();
     if (eligibleRests[randomIndex]) {
@@ -180,6 +184,7 @@ function AppContent() {
                   <Wheel
                     restaurants={getEligibleRestaurants()}
                     onSpinComplete={handleSpinComplete}
+                    onSpinStart={handleSpinStart}
                     isSpinning={isSpinning}
                   />
                 </div>

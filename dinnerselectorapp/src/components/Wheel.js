@@ -11,7 +11,7 @@ const COLORS = [
   '#2E8B9E', '#6B2D5C', '#C89856', '#0C5F4C'
 ];
 
-export const Wheel = ({ restaurants, onSpinComplete, isSpinning }) => {
+export const Wheel = ({ restaurants, onSpinComplete, onSpinStart, isSpinning }) => {
   const svgRef = useRef(null);
   const [rotation, setRotation] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -70,6 +70,9 @@ export const Wheel = ({ restaurants, onSpinComplete, isSpinning }) => {
   const handleSpin = () => {
     if (isSpinning) return;
 
+    // Notify parent that spinning is starting
+    onSpinStart();
+
     // Random selection
     const randomIndex = Math.floor(Math.random() * restaurants.length);
     setSelectedIndex(randomIndex);
@@ -78,14 +81,17 @@ export const Wheel = ({ restaurants, onSpinComplete, isSpinning }) => {
     // Target: selected slice should stop at top (pointer position)
     const sliceStartAngle = randomIndex * sliceAngle;
     const sliceMiddleAngle = sliceStartAngle + sliceAngle / 2;
-    const targetRotation = 360 * 5 + (360 - sliceMiddleAngle); // 5 full rotations + to position
+    const targetRotation = 360 * 15 + (360 - sliceMiddleAngle); // 15 full rotations + to position
 
-    setRotation(targetRotation);
+    // Small delay to ensure state updates and transition starts
+    setTimeout(() => {
+      setRotation(targetRotation);
+    }, 50);
 
-    // Call parent callback after animation completes (3 seconds)
+    // Call parent callback after animation completes (4 seconds)
     setTimeout(() => {
       onSpinComplete(randomIndex);
-    }, 3000);
+    }, 4000);
   };
 
   return (
@@ -107,8 +113,8 @@ export const Wheel = ({ restaurants, onSpinComplete, isSpinning }) => {
           }`}
           style={{
             transform: `rotate(${rotation}deg)`,
-            transitionDuration: isSpinning ? '3s' : '0s',
-            transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            transitionDuration: isSpinning ? '4s' : '0s',
+            transitionTimingFunction: 'cubic-bezier(0.17, 0.67, 0.12, 0.98)',
             filter: 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15))'
           }}
         >
