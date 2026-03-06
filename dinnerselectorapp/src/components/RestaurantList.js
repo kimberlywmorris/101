@@ -144,7 +144,7 @@ export const RestaurantList = () => {
                 <div className="flex items-center gap-4 text-sm mb-2">
                   <span className="text-gray-600">🕐 {restaurant.hoursText}</span>
                   <span className="text-gray-600">
-                    📍 {(restaurant.distanceMeters / 1000).toFixed(1)} km
+                    📍 {(restaurant.distanceMeters / 1609.34).toFixed(1)} mi
                   </span>
                 </div>
 

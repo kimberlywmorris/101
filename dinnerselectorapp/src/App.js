@@ -83,9 +83,46 @@ function AppContent() {
     }
   };
 
-  // Get eligible restaurants (excluding NO_GO)
+  // Apply all filters to restaurants
+  const applyFilters = (rests) => {
+    return rests.filter(rest => {
+      // Exclude NO_GO restaurants
+      if (preferences[rest.id] === 'NO_GO') {
+        return false;
+      }
+
+      // Filter by open now
+      if (filters.openNow && !rest.isOpenNow) {
+        return false;
+      }
+
+      // Filter by cuisines (if selected, only show matching cuisines)
+      if (filters.cuisines.length > 0) {
+        const hasMatchingCuisine = rest.cuisineTypes.some(cuisine =>
+          filters.cuisines.includes(cuisine)
+        );
+        if (!hasMatchingCuisine) return false;
+      }
+
+      // Filter by price levels (if selected, only show matching levels)
+      if (filters.priceLevels.length > 0) {
+        if (!filters.priceLevels.includes(rest.priceLevel)) {
+          return false;
+        }
+      }
+
+      // Filter by radius (distance from user)
+      if (rest.distanceMeters > filters.radiusMeters) {
+        return false;
+      }
+
+      return true;
+    });
+  };
+
+  // Get eligible restaurants (with all filters applied)
   const getEligibleRestaurants = () => {
-    return restaurants.filter(rest => preferences[rest.id] !== 'NO_GO');
+    return applyFilters(restaurants);
   };
 
   const handleSpinComplete = (randomIndex) => {

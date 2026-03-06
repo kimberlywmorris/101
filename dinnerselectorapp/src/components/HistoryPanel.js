@@ -98,7 +98,7 @@ export const HistoryPanel = () => {
                         {entry.restaurantName}
                       </p>
                       <div className="flex items-center gap-2 mt-2 text-xs text-gray-600">
-                        <span>📍 {(entry.filtersSnapshot.radiusMeters / 1000).toFixed(0)}km radius</span>
+                        <span>📍 {(entry.filtersSnapshot.radiusMeters / 1609.34).toFixed(0)} mi radius</span>
                         {entry.filtersSnapshot.openNow && (
                           <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded">
                             Open Now

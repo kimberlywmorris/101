@@ -83,7 +83,7 @@ export const ResultPanel = ({ restaurant }) => {
           <div className="bg-white rounded-lg p-4 text-center">
             <p className="text-sm text-gray-600 mb-1">Distance</p>
             <p className="text-2xl font-bold">
-              {(restaurant.distanceMeters / 1000).toFixed(1)}km
+              {(restaurant.distanceMeters / 1609.34).toFixed(1)} mi
             </p>
           </div>
         </div>
