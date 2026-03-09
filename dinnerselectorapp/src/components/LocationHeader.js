@@ -73,7 +73,7 @@ export const LocationHeader = ({ userLocation, onLocationChange }) => {
   };
 
   return (
-    <header className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-4 sm:p-6 shadow-lg">
+    <header className="bg-gradient-to-r from-[#3aa6a0] to-[#2a5b69] text-white p-4 sm:p-6 shadow-lg">
       <h1 className="text-2xl sm:text-3xl font-bold">🍽️ Family Dinner Spinner</h1>
       <p className="text-sm sm:text-lg mt-2">Let the wheel decide where you eat!</p>
 

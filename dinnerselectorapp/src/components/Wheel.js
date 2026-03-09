@@ -171,7 +171,7 @@ export const Wheel = ({ restaurants, onSpinComplete, onSpinStart, isSpinning }) 
         className={`px-8 py-4 rounded-full text-white font-bold text-xl transition-all transform hover:scale-105 ${
           isLocalSpinning || restaurants.length === 0
             ? 'bg-gray-400 cursor-not-allowed'
-            : 'bg-gradient-to-r from-purple-600 to-blue-600 hover:shadow-lg active:scale-95'
+            : 'bg-gradient-to-r from-[#3aa6a0] to-[#2a5b69] hover:shadow-lg active:scale-95'
         }`}
       >
         {isLocalSpinning ? '🎡 Spinning...' : '🎲 SPIN!'}

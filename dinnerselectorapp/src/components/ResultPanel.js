@@ -44,14 +44,14 @@ export const ResultPanel = ({ restaurant }) => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-lg shadow-lg overflow-hidden">
+    <div className="bg-gradient-to-br from-[#3aa6a0]/10 to-[#2a5b69]/10 rounded-lg shadow-lg overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6">
+      <div className="bg-gradient-to-r from-[#3aa6a0] to-[#2a5b69] text-white p-6">
         <div className="flex items-start justify-between">
           <div>
             <p className="text-sm opacity-90 mb-2">🎡 You're going to...</p>
             <h2 className="text-3xl font-bold">{restaurant.name}</h2>
-            <p className="text-purple-100 mt-2">
+            <p className="text-cyan-100 mt-2">
               {restaurant.cuisineTypes.join(', ')}
             </p>
           </div>
@@ -136,7 +136,7 @@ export const ResultPanel = ({ restaurant }) => {
 
           <button
             onClick={handleDirections}
-            className="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transition"
+            className="bg-gradient-to-r from-[#3aa6a0] to-[#2a5b69] text-white py-3 rounded-lg font-semibold hover:shadow-lg transition"
           >
             📍 Directions
           </button>
