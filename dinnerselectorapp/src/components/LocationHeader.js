@@ -23,40 +23,50 @@ export const LocationHeader = ({ userLocation, onLocationChange }) => {
 
     try {
       // Geocode address using Nominatim (OpenStreetMap - free, no API key required)
-      // Added parameters for better search results
+      // Try with more results in case first result isn't ideal
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?` +
         `format=json&` +
         `q=${encodeURIComponent(address)}&` +
-        `limit=1&` +
-        `countrycodes=us`, // Limit to US for better results
+        `limit=5&` +
+        `addressdetails=1`,
         {
           headers: {
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'User-Agent': 'FamilyDinnerSpinner/1.0'
           }
         }
       );
       
       if (!response.ok) {
-        throw new Error('Network response failed');
+        throw new Error('Nominatim service temporarily unavailable');
       }
       
       const data = await response.json();
+      
+      // Log for debugging
+      console.log('Nominatim response:', data);
 
       if (data && data.length > 0) {
+        // Find a result with valid coordinates
+        const validResult = data.find(result => 
+          result.lat && result.lon && 
+          (result.type === 'house' || result.type === 'residential' || result.type === 'amenity' || result.address?.country === 'United States')
+        ) || data[0]; // Fallback to first result if no perfect match
+
         const location = {
-          lat: parseFloat(data[0].lat),
-          lng: parseFloat(data[0].lon)
+          lat: parseFloat(validResult.lat),
+          lng: parseFloat(validResult.lon)
         };
         onLocationChange(location);
         setAddress('');
         setShowAddressInput(false);
       } else {
-        setAddressError('Address not found. Try entering city, state or full address.');
+        setAddressError('Address not found. Try a simpler format like "city, state" (e.g., "Atlanta, Georgia")');
       }
     } catch (err) {
       console.error('Error geocoding address:', err);
-      setAddressError('Error looking up address. Please try again in a moment.');
+      setAddressError('Service temporarily unavailable. Please try again in a moment.');
     } finally {
       setIsSubmitting(false);
     }
