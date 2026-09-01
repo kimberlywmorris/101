@@ -50,14 +50,24 @@ h1 {
 .contact-btn {
     background: #fff;
     color: #581c87;
+    display: inline-block;
     border: none;
     border-radius: 24px;
     padding: 14px 36px;
     font-size: 1.1rem;
     font-weight: 600;
+    text-decoration: none;
+    line-height: 1.2;
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     transition: background 0.2s, color 0.2s;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
 }
 
 .contact-btn:hover {
